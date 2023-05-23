@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- Устанавливаем кодировку страницы -->
+    <meta charset="UTF-8">
+    <!-- Устанавливаем параметры для масштабирования -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Задаем заголовок страницы -->
+    <title>Лабораторная работа</title>
+    <!-- Подключаем файл стилей для Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <!-- Подключаем файл скриптов для Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<!-- Устанавливаем стили для элементов страницы -->
+<style>
+    .input-field {
+        position: absolute;
+        width: 80px;
+    }
+
+    .podpis {
+        position: absolute;
+        font-size: 18px;
+    }
+
+    #U {
+        width: 65px;
+    }
+
+    #R2 {
+        top: 290px;
+        left: 50px;
+    }
+
+    #R3 {
+        top: 115px;
+        left: 295px;
+    }
+
+    #R4 {
+        top: 265px;
+        left: 253px;
+    }
+
+    #C4 {
+        top: 325px;
+        left: 220px;
+    }
+
+    #voltage {
+        top: 445px;
+        left: 220px;
+    }
+
+    #U {
+        top: 165px;
+        left: 150px;
+    }
+
+    #F {
+        top: 445px;
+        left: 40px;
+    }
+
+    #R2_podpis {
+        top: 295px;
+        left: 130px;
+    }
+
+    #R3_podpis {
+        top: 120px;
+        left: 375px;
+    }
+
+    #R4_podpis {
+        top: 270px;
+        left: 333px;
+    }
+
+    #C4_podpis {
+        top: 330px;
+        left: 300px;
+    }
+
+    #F_podpis {
+        top: 450px;
+        left: 120px;
+    }
+
+    #voltage_podpis {
+        top: 450px;
+        left: 300px;
+    }
+
+</style>
+<!-- Создаем контейнер для страницы -->
+<div class="container">
+    <!-- Создаем строку для заголовка -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <!-- Устанавливаем заголовок страницы -->
+            <h2>Лабораторная работа "Измерение индуктивности с помощью моста Хэя"</h2>
+        </div>
+    </div>
+    <!-- Создаем строку для формы выбора варианта и описания варианта -->
+    <div class="row mt-4">
+        <!-- Создаем колонку для формы выбора варианта и описания варианта -->
+        <div class="col-4">
+            <!-- Создаем строку для названия блока выбора варианта -->
+            <div class="row">
+                <!-- Устанавливаем название блока выбора варианта -->
+                <h4>Варианты:</h4>
+                <!-- Создаем выпадающий список для выбора варианта -->
+                <select class="form-select" onchange="showDescription()" id="variant-selector">
+                    <!-- Создаем опцию по умолчанию -->
+                    <option value="" selected disabled>Выберите вариант</option>
+                    <!-- Заполняем список вариантами, используя данные из шаблонизатора -->
+                    {% for variant in variants %}
+                        <option value="{{ variant.description }}" data-l1="{{ variant.L1 }}" data-r1="{{ variant.R1 }}"
+                                data-f="{{ variant.F }}" data-voltage="{{ variant.Voltage }}">
+                            {{ variant.number }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Создаем строку для блока с описанием варианта -->
+            <div class="row mt-4">
+                <!-- Устанавливаем название блока с описанием варианта -->
+                <h4>Описание варианта:</h4>
+                <!-- Создаем блок для вывода описания варианта -->
+                <div id="description"></div>
+            </div>
+            <div class="row mt-4">
+                <h4>Уравновешивание мостовой схемы</h4>
+                <h5>Магазин сопротивлений R2, R3, R4: 0.001-100 Ом</h5>
+                <h5>Магазин емкости C4: 0.0001-0.1 мФ</h5>
+
+            </div>
+            <div class="flex-container text-align-center">
+                <button type="button" class="btn btn-outline-primary" onclick="print()">Измерить</button>
+            </div>
+        </div>
+        <!-- Создаем колонку для блока с изображением моста Хэя и формой для ввода данных -->
+        <div class="col-4">
+            <!-- Устанавливаем заголовок блока с мостом Хэя -->
+            <h3>Мост Хэя:</h3>
+            <!-- Создаем блок для изображения моста Хэя и формы для ввода данных -->
+            <div style="position: relative;">
+                <img src="https://cdn.discordapp.com/attachments/1064527921278111787/1103228886172585994/bridge_.png"
+                     alt="Мост Хэя" width="100%"/>
+                <input type="number" id="R2" class="input-field" placeholder="R2" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="R3" class="input-field" placeholder="R3" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="R4" class="input-field" placeholder="R4" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="C4" class="input-field" placeholder="C4" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="U" class="input-field" placeholder="U" readonly/>
+                <input type="number" id="F" class="input-field" placeholder="F" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="voltage" class="input-field" placeholder="U" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <p class="podpis" id="R2_podpis">Ом</p>
+                <p class="podpis" id="R3_podpis">Ом</p>
+                <p class="podpis" id="R4_podpis">Ом</p>
+                <p class="podpis" id="C4_podpis">мкФ</p>
+                <p class="podpis" id="F_podpis">Гц</p>
+                <p class="podpis" id="voltage_podpis">В</p>
+            </div>
+        </div>
+        <div class="col-4">
+            <h3>Параметры измеренной индуктивности:</h3>
+            <div class="">
+                <h5>Индуктивность L1: </h5>
+                <p id="L1"></p>
+                <h5>Сопротивление R1: </h5>
+                <p id="R1"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Создаем скрипт для работы страницы -->
+<script defer>
+    // Инициализируем переменные для хранения данных о выбранном варианте
+    let L1 = 0;
+    let R1 = 0;
+    let F = 0;
+    let voltage = 0;
+    let L01 = 0;
+    let R01 = 0;
+
+    // Создаем функцию для вывода описания выбранного варианта
+    function showDescription() {
+        // Получаем элемент выпадающего списка с вариантами
+        const variantSelector = document.getElementById("variant-selector");
+        // Получаем выбранный элемент из списка
+        const selectedOption = variantSelector.options[variantSelector.selectedIndex];
+        // Выводим описание варианта
+        document.getElementById("description").innerText = selectedOption.value;
+        // Сохраняем данные о выбранном варианте в переменных
+        L1 = parseFloat(selectedOption.getAttribute("data-l1"));
+        R1 = parseFloat(selectedOption.getAttribute("data-r1"));
+        F = parseFloat(selectedOption.getAttribute("data-f"));
+        voltage = parseFloat(selectedOption.getAttribute("data-voltage"));
+        console.log(L1, R1, F, voltage);
+        // Заполняем поля формы значениями из выбранного варианта
+        document.getElementById("voltage").value = voltage;
+        document.getElementById("F").value = F;
+    }
+
+    // Создаем функцию для расчета индуктивности по данным из формы
+    function calculate() {
+
+        const R2 = parseFloat(document.getElementById("R2").value);
+        const R3 = parseFloat(document.getElementById("R3").value);
+        const R4 = parseFloat(document.getElementById("R4").value);
+        const C4 = parseFloat(document.getElementById("C4").value);
+        const F = parseFloat(document.getElementById("F").value);
+        if (R2 < 0.1) {
+            document.getElementById("R2").value = 0.1;
+        }
+        if (R3 < 0.001) {
+            document.getElementById("R3").value = 0.1;
+        }
+        if (R4 < 0.001) {
+            document.getElementById("R4").value = 0.1;
+        }
+        if (C4 < 0.0001) {
+            document.getElementById("C4").value = 0.1;
+        }
+        if (R2 > 100) {
+            document.getElementById("R2").value = 100;
+        }
+        if (R3 > 100) {
+            document.getElementById("R3").value = 100;
+        }
+        if (R4 > 100) {
+            document.getElementById("R4").value = 100;
+        }
+        if (C4 > 100) {
+            document.getElementById("C4").value = 100;
+        }
+
+        // Проверяем наличие всех значений
+        if (isNaN(R2) || isNaN(R3) || isNaN(R4) || isNaN(C4))
+            return; // Выход из функции, если одно из значений отсутствует
+
+
+        let XL1 = R1 + 6.28 * F * L1;
+        L01 = (R2 * R3 * C4) / (1 + (6.28 * F * C4 * R4) * (6.28 * F * C4 * R4)) * (1 + ((Math.random() * (1 + 1) - 1)) / 10);
+        R01 = ((6.28 * F * C4) * (6.28 * F * C4) * R2 * R3 * R4) / (1 + (6.28 * F * C4 * R4) * (6.28 * F * C4 * R4)) * (1 + ((Math.random() * (1 + 1) - 1)) / 10);
+        let XL01 = (R01 + 6.28 * F * L01) * (1 + ((Math.random() * (1 + 1) - 1)) / 10);
+        let UM = (XL1 - XL01) * 0.1;
+
+        // Выводим результаты расчета в консоль и в форму
+        console.log(UM);
+        document.getElementById("U").value = UM.toFixed(2); // Округляем результат до 2 знаков после запятой}
+    }
+
+    function print() {
+        document.getElementById("L1").innerHTML = L01.toFixed(7) + " Гн";
+        console.log(L01)
+        document.getElementById("R1").innerHTML = R01.toFixed(7) + " Ом";
+    }
+</script>
+</body>
+</html>
+ 
