@@ -137,10 +137,25 @@
             </div>
             <div class="row mt-4">
                 <h4>Уравновешивание мостовой схемы</h4>
+                <h6>Магазин сопротивлений R2, R3, R4: 0.001-100 Ом</h6>
+                <h6>Магазин емкости C4: 0.0001-0.1 мФ</h6>
 
             </div>
             <div class="flex-container text-align-center">
-                <button type="button" class="btn btn-outline-primary" onclick="print()">Рассчитать</button>
+                <button type="button" class="btn btn-outline-primary" onclick="print()">Измерить</button>
+            </div>
+            <div class="row mt-4">
+                <h4>Порядок работы</h4>
+                <ul>
+                    <li>Выберите вариант в соответствии с заданием преподавателя</li>
+                    <li>Выполните уравновешивание измерительного моста, изменяя
+                        значения магазинов сопротивлений R2, R3, R4
+                        и магазина емкости, добиваясь показания милливольтметра -0.05 В &lt; U &lt; 0.05 В
+                    </li>
+                    <li>Нажмите кнопку "Измерить" и считайте
+                        параметры индуктивности с экрана
+                    </li>
+                </ul>
             </div>
         </div>
         <!-- Создаем колонку для блока с изображением моста Хэя и формой для ввода данных -->
@@ -151,13 +166,19 @@
             <div style="position: relative;">
                 <img src="https://cdn.discordapp.com/attachments/1064527921278111787/1103228886172585994/bridge_.png"
                      alt="Мост Хэя" width="100%"/>
-                <input type="number" id="R2" class="input-field" placeholder="R2" oninput="calculate()"/>
-                <input type="number" id="R3" class="input-field" placeholder="R3" oninput="calculate()"/>
-                <input type="number" id="R4" class="input-field" placeholder="R4" oninput="calculate()"/>
-                <input type="number" id="C4" class="input-field" placeholder="C4" oninput="calculate()"/>
+                <input type="number" id="R2" class="input-field" placeholder="R2" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="R3" class="input-field" placeholder="R3" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="R4" class="input-field" placeholder="R4" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="C4" class="input-field" placeholder="C4" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
                 <input type="number" id="U" class="input-field" placeholder="U" readonly/>
-                <input type="number" id="F" class="input-field" placeholder="F" oninput="calculate()"/>
-                <input type="number" id="voltage" class="input-field" placeholder="U" oninput="calculate()"/>
+                <input type="number" id="F" class="input-field" placeholder="F" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
+                <input type="number" id="voltage" class="input-field" placeholder="U" oninput="calculate()" min="0.1"
+                       max="100" step="0.1"/>
                 <p class="podpis" id="R2_podpis">Ом</p>
                 <p class="podpis" id="R3_podpis">Ом</p>
                 <p class="podpis" id="R4_podpis">Ом</p>
@@ -208,11 +229,36 @@
 
     // Создаем функцию для расчета индуктивности по данным из формы
     function calculate() {
+
         const R2 = parseFloat(document.getElementById("R2").value);
         const R3 = parseFloat(document.getElementById("R3").value);
         const R4 = parseFloat(document.getElementById("R4").value);
         const C4 = parseFloat(document.getElementById("C4").value);
         const F = parseFloat(document.getElementById("F").value);
+        if (R2 < 0.1) {
+            document.getElementById("R2").value = 0.1;
+        }
+        if (R3 < 0.001) {
+            document.getElementById("R3").value = 0.1;
+        }
+        if (R4 < 0.001) {
+            document.getElementById("R4").value = 0.1;
+        }
+        if (C4 < 0.0000001) {
+            document.getElementById("C4").value = 0.1;
+        }
+        if (R2 > 100) {
+            document.getElementById("R2").value = 100;
+        }
+        if (R3 > 100) {
+            document.getElementById("R3").value = 100;
+        }
+        if (R4 > 100) {
+            document.getElementById("R4").value = 100;
+        }
+        if (C4 > 100) {
+            document.getElementById("C4").value = 100;
+        }
 
         // Проверяем наличие всех значений
         if (isNaN(R2) || isNaN(R3) || isNaN(R4) || isNaN(C4))
@@ -231,8 +277,9 @@
     }
 
     function print() {
-        document.getElementById("L1").innerHTML = L01.toFixed(4) + " Гн";
-        document.getElementById("R1").innerHTML = R01.toFixed(4) + " Ом";
+        document.getElementById("L1").innerHTML = L01.toFixed(7) + " Гн";
+        console.log(L01)
+        document.getElementById("R1").innerHTML = R01.toFixed(7) + " Ом";
     }
 </script>
 </body>
