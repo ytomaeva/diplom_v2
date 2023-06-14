@@ -138,8 +138,8 @@
             </div>
             <div class="row mt-4">
                 <h4>Уравновешивание мостовой схемы</h4>
-                <h6>Магазин сопротивлений R2, R3, R4: 0.001-100 Ом</h6>
-                <h6>Магазин емкости C4: 0.0001-0.1 мФ</h6>
+                <h6>Магазин сопротивлений R2, R3, R4: 0.1-500 Ом</h6>
+                <h6>Магазин емкости C4: 0.001-1 Ф</h6>
 
             </div>
             <div class="flex-container text-align-center">
@@ -151,7 +151,11 @@
                     <li>Выберите вариант в соответствии с заданием преподавателя</li>
                     <li>Выполните уравновешивание измерительного моста, изменяя
                         значения магазинов сопротивлений R2, R3, R4
-                        и магазина емкости, добиваясь показания милливольтметра -0.05 В &lt; U &lt; 0.05 В
+                        и магазина емкости, добиваясь показания милливольтметра -0.05 В &lt; U &lt; 0.05 В<br>
+                        Магазин сопротивлений R2: 0.1-500 Ом<br>
+                        Магазин сопротивлений R3: 0.1-500 Ом<br>
+                        Магазин сопротивлений R4: 0.1-500 Ом<br>
+                        Магазин емкости C4: 0.001-1 Ф
                     </li>
                     <li>Нажмите кнопку "Измерить" и считайте
                         параметры индуктивности с экрана
@@ -183,7 +187,7 @@
                 <p class="podpis" id="R2_podpis">Ом</p>
                 <p class="podpis" id="R3_podpis">Ом</p>
                 <p class="podpis" id="R4_podpis">Ом</p>
-                <p class="podpis" id="C4_podpis">мкФ</p>
+                <p class="podpis" id="C4_podpis">Ф</p>
                 <p class="podpis" id="F_podpis">Гц</p>
                 <p class="podpis" id="voltage_podpis">В</p>
             </div>
@@ -239,25 +243,25 @@
         if (R2 < 0.1) {
             document.getElementById("R2").value = 0.1;
         }
-        if (R3 < 0.001) {
+        if (R3 < 0.1) {
             document.getElementById("R3").value = 0.1;
         }
-        if (R4 < 0.001) {
+        if (R4 < 0.1) {
             document.getElementById("R4").value = 0.1;
         }
-        if (C4 < 0.0000001) {
+        if (C4 < 0.001) {
             document.getElementById("C4").value = 0.1;
         }
-        if (R2 > 100) {
+        if (R2 > 500) {
             document.getElementById("R2").value = 100;
         }
-        if (R3 > 100) {
+        if (R3 > 500) {
             document.getElementById("R3").value = 100;
         }
-        if (R4 > 100) {
+        if (R4 > 500) {
             document.getElementById("R4").value = 100;
         }
-        if (C4 > 100) {
+        if (C4 > 1) {
             document.getElementById("C4").value = 100;
         }
 
